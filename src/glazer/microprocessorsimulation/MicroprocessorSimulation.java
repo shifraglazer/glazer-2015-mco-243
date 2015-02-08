@@ -23,7 +23,6 @@ public class MicroprocessorSimulation {
 			next = array[counter];
 			counter++;
 			process(next);
-
 		}
 		addNewLine();
 	}
