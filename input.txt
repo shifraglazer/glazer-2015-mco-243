@@ -1,0 +1,9 @@
+LD 16
+SWP 
+LD 17
+//hello
+ADD
+ST 19
+SWP //ndkd
+ST 18
+STP
