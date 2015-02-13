@@ -81,9 +81,12 @@ public class Compiler {
 			}
 			}
 			if (arg != null) {
-				if (arg.length() == 2) {
+				if (arg.length() == 2||arg.length()==3) {
 					arg = Integer.toHexString(Integer.valueOf(arg));
 					arg=arg.toUpperCase();
+					if(arg.length()==1){
+						byteCode.append("0");
+					}
 					byteCode.append(arg);
 				}
 
@@ -95,10 +98,12 @@ public class Compiler {
 	}
 
 	public String getByteCode() {
-		for (int i = byteCode.length(); i < 256; i++) {
+		String code=byteCode.toString();
+		for (int i =code.length() ; i < 256; i++) {
 			byteCode.append("0");
 		}
-		return byteCode.toString();
+		code=byteCode.toString();
+		return code;
 	}
 
 	public static void main(String args[]) {
