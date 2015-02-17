@@ -68,7 +68,11 @@ public class Compiler {
 				break;
 
 			}
-
+			/*
+			case "DATA":{
+				arg=input.next();
+			}
+			 */
 			default: {
 				if (code.length() >= 2) {
 					code = code.substring(0, 2);
