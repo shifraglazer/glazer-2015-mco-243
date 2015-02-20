@@ -8,11 +8,13 @@ public class Compiler {
 
 	private Scanner input;
 	private StringBuilder byteCode;
-
+	private char array[];
+	private int counter;
 	public Compiler(Scanner input) {
 		this.input = input;
 		byteCode = new StringBuilder();
-
+		counter=0;
+		array=new char[256];
 	}
 
 	public void compute() throws InvalidCodeError {
@@ -23,33 +25,39 @@ public class Compiler {
 			arg = null;
 			switch (code) {
 			case "LD": {
-				byteCode.append("0");
+				array[counter++]='0';
+				//byteCode.append("0");
 				arg = input.next();
 				break;
 			}
 			case "ST": {
-				byteCode.append("1");
+				array[counter++]='1';
+				//byteCode.append("1");
 				arg = input.next();
 
 				break;
 			}
 			case "SWP": {
-				byteCode.append("2");
+				array[counter++]='2';
+				//byteCode.append("2");
 
 				break;
 			}
 			case "ADD": {
-				byteCode.append("3");
+				array[counter++]='3';
+				//byteCode.append("3");
 
 				break;
 			}
 			case "INC": {
-				byteCode.append("4");
+				array[counter++]='4';
+				//byteCode.append("4");
 
 				break;
 			}
 			case "DEC": {
-				byteCode.append("5");
+				array[counter++]='5';
+				//byteCode.append("5");
 
 				break;
 			}
@@ -68,11 +76,11 @@ public class Compiler {
 				break;
 
 			}
-			/*
+			
 			case "DATA":{
 				arg=input.next();
 			}
-			 */
+			 
 			default: {
 				if (code.length() >= 2) {
 					code = code.substring(0, 2);
