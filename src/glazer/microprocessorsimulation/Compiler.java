@@ -7,14 +7,13 @@ import java.util.Scanner;
 public class Compiler {
 
 	private Scanner input;
-	private StringBuilder byteCode;
 	private char array[];
 	private int counter;
+
 	public Compiler(Scanner input) {
 		this.input = input;
-		byteCode = new StringBuilder();
-		counter=0;
-		array=new char[256];
+		counter = 0;
+		array = new char[256];
 	}
 
 	public void compute() throws InvalidCodeError {
@@ -25,62 +24,63 @@ public class Compiler {
 			arg = null;
 			switch (code) {
 			case "LD": {
-				array[counter++]='0';
-				//byteCode.append("0");
+				array[counter++] = '0';
 				arg = input.next();
 				break;
 			}
 			case "ST": {
-				array[counter++]='1';
-				//byteCode.append("1");
+				array[counter++] = '1';
 				arg = input.next();
 
 				break;
 			}
 			case "SWP": {
-				array[counter++]='2';
-				//byteCode.append("2");
+				array[counter++] = '2';
 
 				break;
 			}
 			case "ADD": {
-				array[counter++]='3';
-				//byteCode.append("3");
+				array[counter++] = '3';
 
 				break;
 			}
 			case "INC": {
-				array[counter++]='4';
-				//byteCode.append("4");
+				array[counter++] = '4';
 
 				break;
 			}
 			case "DEC": {
-				array[counter++]='5';
-				//byteCode.append("5");
+				array[counter++] = '5';
 
 				break;
 			}
 			case "BZ": {
-				byteCode.append("6");
+				array[counter++] = '6';
+
 				arg = input.next();
 				break;
 			}
 			case "BR": {
-				byteCode.append("7");
+				array[counter++] = '7';
+
 				arg = input.next();
 				break;
 			}
 			case "STP": {
-				byteCode.append("8");
+				array[counter++] = '8';
+
 				break;
 
 			}
-			
-			case "DATA":{
-				arg=input.next();
+
+			case "DATA": {
+				int location = input.nextInt();
+				Integer data = input.nextInt();
+				array[location] = (char) (Integer.toHexString(data)
+						.toUpperCase()).charAt(0);
+				break;
 			}
-			 
+
 			default: {
 				if (code.length() >= 2) {
 					code = code.substring(0, 2);
@@ -93,13 +93,19 @@ public class Compiler {
 			}
 			}
 			if (arg != null) {
-				if (arg.length() == 2||arg.length()==3) {
+				if (arg.length() == 2 || arg.length() == 3) {
 					arg = Integer.toHexString(Integer.valueOf(arg));
-					arg=arg.toUpperCase();
-					if(arg.length()==1){
-						byteCode.append("0");
+					arg = arg.toUpperCase();
+					if (arg.length() == 1) {
+
+						array[counter++] = '0';
+						array[counter++] = arg.charAt(0);
 					}
-					byteCode.append(arg);
+
+					else {
+						array[counter++] = arg.charAt(0);
+						array[counter++] = arg.charAt(1);
+					}
 				}
 
 			}
@@ -110,16 +116,17 @@ public class Compiler {
 	}
 
 	public String getByteCode() {
-		String code=byteCode.toString();
-		for (int i =code.length() ; i < 256; i++) {
-			byteCode.append("0");
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == '\0') {
+				array[i] = '0';
+			}
 		}
-		code=byteCode.toString();
-		return code;
+		return String.valueOf(array);
 	}
 
 	public static void main(String args[]) {
-		//String machineCode = "LD 16\n SWP\n LD 17\n ADD\n ST 19\n SWP \n ST 18\n STP\n";
+		// String machineCode =
+		// "LD 16\n SWP\n LD 17\n ADD\n ST 19\n SWP \n ST 18\n STP\n";
 		Scanner input;
 		try {
 			input = new Scanner(new File("input2.txt"));
