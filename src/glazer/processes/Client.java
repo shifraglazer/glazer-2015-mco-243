@@ -18,7 +18,7 @@ public class Client {
 
 		try {
 
-			socket = new Socket("localhost", 3761);
+			socket = new Socket("localhost", 3762);
 
 			OutputStream out = socket.getOutputStream();
 

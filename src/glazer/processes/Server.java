@@ -18,7 +18,7 @@ public class Server {
 
 		try {
 
-			ServerSocket serverSocket = new ServerSocket(3761); // port num sent
+			ServerSocket serverSocket = new ServerSocket(3762); // port num sent
 
 			// in
 
