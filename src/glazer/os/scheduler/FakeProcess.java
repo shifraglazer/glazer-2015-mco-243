@@ -1,8 +1,5 @@
 package glazer.os.scheduler;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class FakeProcess {
 
@@ -11,11 +8,8 @@ public class FakeProcess {
 	int waiting;
 	int runTimeRemaining;
 	int number;
-	private ScheduledExecutorService execute;
-	private ScheduledExecutorService waitingTime;
-
 	public FakeProcess(int timeToCompletion, int priority,int number) {
-		execute=Executors.newScheduledThreadPool(1);
+		waitingIncrease.run();
 		waiting = 0;
 		this.number=number;
 		this.timeToCompletion = timeToCompletion;
@@ -23,9 +17,6 @@ public class FakeProcess {
 		if(timeToCompletion>0){
 		priority = (waiting + timeToCompletion) / timeToCompletion;
 		}
-		waitingTime = Executors.newScheduledThreadPool(1);
-		waitingTime.scheduleAtFixedRate(waitingIncrease, 0, 1,
-				TimeUnit.MILLISECONDS);
 	}
 
 	public int getNumber() {
@@ -52,8 +43,6 @@ public class FakeProcess {
 	}
 
 	public void  run(int quantum) throws InterruptedException {
-		//execute.shutdown();
-	//	execute = Executors.newScheduledThreadPool(1);
 		 //reduce time left in process
 		runTimeRemaining = quantum;
 		
@@ -65,9 +54,7 @@ public class FakeProcess {
 			Thread.sleep(timeToCompletion);
 			timeToCompletion=0;
 		}
-		
-		
-		//execute.scheduleAtFixedRate(decrease, 0, 1, TimeUnit.MILLISECONDS);
+	
 	}
 
 	public int getRunTimeRemaining() {
@@ -90,26 +77,7 @@ public class FakeProcess {
 		return timeToCompletion > 0;
 	}
 
-	private Runnable decrease = new Runnable() {
 
-		@Override
-		public void run() {
-			if (runTimeRemaining > 0) {
-
-				runTimeRemaining--;
-				if (timeToCompletion > 0) {
-					timeToCompletion--;
-				}
-				else{
-					runTimeRemaining=0;
-					execute.shutdown();
-				}
-			} else {
-				execute.shutdown();
-			}
-		}
-
-	};
 	private Runnable waitingIncrease = new Runnable() {
 
 		@Override
@@ -118,6 +86,12 @@ public class FakeProcess {
 				waiting++;
 			} else {
 			waiting=0;
+			}
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				
+				e.printStackTrace();
 			}
 		}
 

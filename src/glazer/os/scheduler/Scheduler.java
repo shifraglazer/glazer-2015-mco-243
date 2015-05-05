@@ -3,11 +3,7 @@ package glazer.os.scheduler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
-import org.junit.Test;
 
 public class Scheduler {
 
@@ -16,12 +12,11 @@ public class Scheduler {
 	List<FakeProcess> list;
 	SchedulerAlgorithm algorithm;
 	final static Random random=new Random(15);
-	private ScheduledExecutorService executor;
+	
 	public Scheduler(SchedulerAlgorithm algorithm){
-		executor=Executors.newSingleThreadScheduledExecutor();
 		random.setSeed(12355678);
-		timer=800;
-		executor.scheduleAtFixedRate(time, 0,1, TimeUnit.MILLISECONDS);
+		timer=500;
+		time.start();
 		list=new ArrayList<>();
 		for(int i=0;i<100;i++){
 			list.add(new FakeProcess(random.nextInt(15),random.nextInt(10)+1,i+1));
@@ -31,7 +26,7 @@ public class Scheduler {
 	
 	public void run() throws InterruptedException{
 		//while(list.size()>0){
-		while(timer>0){
+		while(timer>0 && list.size()>0){
 			FakeProcess process=algorithm.getNextProcess(list);
 			list.remove(process);
 			//System.out.println("process#: "+process.getNumber()+" timeleft: "+process.getTimeToCompletion()+" priority: "+process.getPriority());
@@ -40,7 +35,7 @@ public class Scheduler {
 			if(process.isStillRunning()){
 				list.add(process);
 			}
-			
+	
 		}
 	}
 	public  int listSize(){
@@ -80,10 +75,18 @@ public class Scheduler {
 			e.printStackTrace();
 		}
 	}
-	private Runnable time=new Runnable(){
+	private Thread time=new Thread(){
 		@Override
 		public void run(){
+			while(timer>0){
 			timer--;
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
 		}
 	};
 }

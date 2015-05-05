@@ -1,7 +1,5 @@
 package glazer.os.scheduler;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class TestProcessScheduler {
